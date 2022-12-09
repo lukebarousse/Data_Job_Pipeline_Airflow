@@ -1,0 +1,272 @@
+code,country,country_long,year,ccTLD,notes
+AD,Andorra,Andorra,1974,.ad,
+AE,United Arab Emirates,United Arab Emirates,1974,.ae,
+AF,Afghanistan,Afghanistan,1974,.af,
+AG,Antigua and Barbuda,Antigua and Barbuda,1974,.ag,
+AI,Anguilla,Anguilla,1985,.ai,AI previously represented French Afars and Issas
+AL,Albania,Albania,1974,.al,
+AM,Armenia,Armenia,1992,.am,
+AO,Angola,Angola,1974,.ao,
+AQ,Antarctica,Antarctica,1974,.aq,"Covers the territories south of 60° south latitude
+Code taken from name in French: Antarctique"
+AR,Argentina,Argentina,1974,.ar,
+AS,American Samoa,American Samoa,1974,.as,
+AT,Austria,Austria,1974,.at,
+AU,Australia,Australia,1974,.au,Includes the Ashmore and Cartier Islands and the Coral Sea Islands
+AW,Aruba,Aruba,1986,.aw,
+AX,Åland Islands,Åland Islands,2004,.ax,An autonomous county of Finland
+AZ,Azerbaijan,Azerbaijan,1992,.az,
+BA,Bosnia and Herzegovina,Bosnia and Herzegovina,1992,.ba,
+BB,Barbados,Barbados,1974,.bb,
+BD,Bangladesh,Bangladesh,1974,.bd,
+BE,Belgium,Belgium,1974,.be,
+BF,Burkina Faso,Burkina Faso,1984,.bf,Name changed from Upper Volta (HV)
+BG,Bulgaria,Bulgaria,1974,.bg,
+BH,Bahrain,Bahrain,1974,.bh,
+BI,Burundi,Burundi,1974,.bi,
+BJ,Benin,Benin,1977,.bj,Name changed from Dahomey (DY)
+BL,Saint Barthélemy,Saint Barthélemy,2007,.bl,
+BM,Bermuda,Bermuda,1974,.bm,
+BN,Brunei Darussalam,Brunei Darussalam,1974,.bn,Previous ISO country name: Brunei
+BO,Bolivia,Bolivia (Plurinational State of),1974,.bo,Previous ISO country name: Bolivia
+BQ,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba",2010,.bq,"Consists of three Caribbean ""special municipalities"", which are part of the Netherlands proper: Bonaire, Sint Eustatius, and Saba (the BES Islands)
+Previous ISO country name: Bonaire, Saint Eustatius and Saba
+BQ previously represented British Antarctic Territory"
+BR,Brazil,Brazil,1974,.br,
+BS,Bahamas,Bahamas,1974,.bs,
+BT,Bhutan,Bhutan,1974,.bt,
+BV,Bouvet Island,Bouvet Island,1974,.bv,Belongs to Norway
+BW,Botswana,Botswana,1974,.bw,
+BY,Belarus,Belarus,1974,.by,"Code taken from previous ISO country name: Byelorussian SSR (now assigned ISO 3166-3 code BYAA)
+Code assigned as the country was already a UN member since 1945[15]"
+BZ,Belize,Belize,1974,.bz,
+CA,Canada,Canada,1974,.ca,
+CC,Cocos (Keeling) Islands,Cocos (Keeling) Islands,1974,.cc,Belongs to Australia
+CD,"Congo, Democratic Republic of the","Congo, Democratic Republic of the",1997,.cd,Name changed from Zaire (ZR)
+CF,Central African Republic,Central African Republic,1974,.cf,
+CG,Congo,Congo,1974,.cg,
+CH,Switzerland,Switzerland,1974,.ch,Code taken from name in Latin: Confoederatio Helvetica
+CI,Côte d'Ivoire,Côte d'Ivoire,1974,.ci,ISO country name follows UN designation (common name and previous ISO country name: Ivory Coast)
+CK,Cook Islands,Cook Islands,1974,.ck,
+CL,Chile,Chile,1974,.cl,
+CM,Cameroon,Cameroon,1974,.cm,"Previous ISO country name: Cameroon, United Republic of"
+CN,China,China,1974,.cn,
+CO,Colombia,Colombia,1974,.co,
+CR,Costa Rica,Costa Rica,1974,.cr,
+CU,Cuba,Cuba,1974,.cu,
+CV,Cabo Verde,Cabo Verde,1974,.cv,"ISO country name follows UN designation (common name and previous ISO country name: Cape Verde, another previous ISO country name: Cape Verde Islands)"
+CW,Curaçao,Curaçao,2010,.cw,
+CX,Christmas Island,Christmas Island,1974,.cx,Belongs to Australia
+CY,Cyprus,Cyprus,1974,.cy,
+CZ,Czechia,Czechia,1993,.cz,Previous ISO country name: Czech Republic
+DE,Germany,Germany,1974,.de,"Code taken from name in German: Deutschland
+Code used for West Germany before 1990 (previous ISO country name: Germany, Federal Republic of)"
+DJ,Djibouti,Djibouti,1977,.dj,Name changed from French Afars and Issas (AI)
+DK,Denmark,Denmark,1974,.dk,
+DM,Dominica,Dominica,1974,.dm,
+DO,Dominican Republic,Dominican Republic,1974,.do,
+DZ,Algeria,Algeria,1974,.dz,"Code taken from name in Arabic الجزائر al-Djazā'ir, Algerian Arabic الدزاير al-Dzāyīr, or Berber ⴷⵣⴰⵢⵔ Dzayer"
+EC,Ecuador,Ecuador,1974,.ec,
+EE,Estonia,Estonia,1992,.ee,Code taken from name in Estonian: Eesti
+EG,Egypt,Egypt,1974,.eg,
+EH,Western Sahara,Western Sahara,1974,,"Previous ISO country name: Spanish Sahara (code taken from name in Spanish: Sahara español)
+.eh ccTLD has not been implemented.[16]"
+ER,Eritrea,Eritrea,1993,.er,
+ES,Spain,Spain,1974,.es,Code taken from name in Spanish: España
+ET,Ethiopia,Ethiopia,1974,.et,
+FI,Finland,Finland,1974,.fi,
+FJ,Fiji,Fiji,1974,.fj,
+FK,Falkland Islands,Falkland Islands (Malvinas),1974,.fk,ISO country name follows UN designation due to the Falkland Islands sovereignty dispute (local common name: Falkland Islands)[17]
+FM,Federated States of Micronesia,Micronesia (Federated States of),1986,.fm,Previous ISO country name: Micronesia
+FO,Faroe Islands,Faroe Islands,1974,.fo,Code taken from name in Faroese: Føroyar
+FR,France,France,1974,.fr,Includes Clipperton Island
+GA,Gabon,Gabon,1974,.ga,
+GB,United Kingdom,United Kingdom of Great Britain and Northern Ireland,1974,".gb
+(.uk)","Includes Akrotiri and Dhekelia (Sovereign Base Areas)
+Code taken from Great Britain (from official name: United Kingdom of Great Britain and Northern Ireland)[18]
+Previous ISO country name: United Kingdom
+.uk is the primary ccTLD of the United Kingdom instead of .gb (see code UK, which is exceptionally reserved)"
+GD,Grenada,Grenada,1974,.gd,
+GE,Georgia,Georgia,1992,.ge,GE previously represented Gilbert and Ellice Islands
+GF,French Guiana,French Guiana,1974,.gf,Code taken from name in French: Guyane française
+GG,Guernsey,Guernsey,2006,.gg,A British Crown Dependency
+GH,Ghana,Ghana,1974,.gh,
+GI,Gibraltar,Gibraltar,1974,.gi,
+GL,Greenland,Greenland,1974,.gl,
+GM,Gambia,Gambia,1974,.gm,
+GN,Guinea,Guinea,1974,.gn,
+GP,Guadeloupe,Guadeloupe,1974,.gp,
+GQ,Equatorial Guinea,Equatorial Guinea,1974,.gq,Code taken from name in French: Guinée équatoriale
+GR,Greece,Greece,1974,.gr,
+GS,South Georgia and the South Sandwich Islands,South Georgia and the South Sandwich Islands,1993,.gs,
+GT,Guatemala,Guatemala,1974,.gt,
+GU,Guam,Guam,1974,.gu,
+GW,Guinea-Bissau,Guinea-Bissau,1974,.gw,
+GY,Guyana,Guyana,1974,.gy,
+HK,Hong Kong,Hong Kong,1974,.hk,Hong Kong is officially a Special Administrative Region of the People's Republic of China since 1 July 1997
+HM,Heard Island and McDonald Islands,Heard Island and McDonald Islands,1974,.hm,Belongs to Australia
+HN,Honduras,Honduras,1974,.hn,
+HR,Croatia,Croatia,1992,.hr,Code taken from name in Croatian: Hrvatska
+HT,Haiti,Haiti,1974,.ht,
+HU,Hungary,Hungary,1974,.hu,
+ID,Indonesia,Indonesia,1974,.id,
+IE,Ireland,Ireland,1974,.ie,
+IL,Israel,Israel,1974,.il,
+IM,Isle of Man,Isle of Man,2006,.im,A British Crown Dependency
+IN,India,India,1974,.in,
+IO,British Indian Ocean Territory,British Indian Ocean Territory,1974,.io,
+IQ,Iraq,Iraq,1974,.iq,
+IR,Iran ,Iran (Islamic Republic of),1974,.ir,Previous ISO country name: Iran
+IS,Iceland,Iceland,1974,.is,Code taken from name in Icelandic: Ísland
+IT,Italy,Italy,1974,.it,
+JE,Jersey,Jersey,2006,.je,A British Crown Dependency
+JM,Jamaica,Jamaica,1974,.jm,
+JO,Jordan,Jordan,1974,.jo,
+JP,Japan,Japan,1974,.jp,
+KE,Kenya,Kenya,1974,.ke,
+KG,Kyrgyzstan,Kyrgyzstan,1992,.kg,
+KH,Cambodia,Cambodia,1974,.kh,"Code taken from former name: Khmer Republic
+Previous ISO country name: Kampuchea, Democratic"
+KI,Kiribati,Kiribati,1979,.ki,Name changed from Gilbert Islands (GE)
+KM,Comoros,Comoros,1974,.km,"Code taken from name in Comorian: Komori
+Previous ISO country name: Comoro Islands"
+KN,Saint Kitts and Nevis,Saint Kitts and Nevis,1974,.kn,Previous ISO country name: Saint Kitts-Nevis-Anguilla
+KP,North Korea,Korea (Democratic People's Republic of),1974,.kp,ISO country name follows UN designation (common name: North Korea)
+KR,South Korea,"Korea, Republic of",1974,.kr,ISO country name follows UN designation (common name: South Korea)
+KW,Kuwait,Kuwait,1974,.kw,
+KY,Cayman Islands,Cayman Islands,1974,.ky,
+KZ,Kazakhstan,Kazakhstan,1992,.kz,Previous ISO country name: Kazakstan
+LA,Lao People's Democratic Republic,Lao People's Democratic Republic,1974,.la,ISO country name follows UN designation (common name and previous ISO country name: Laos)
+LB,Lebanon,Lebanon,1974,.lb,
+LC,Saint Lucia,Saint Lucia,1974,.lc,
+LI,Liechtenstein,Liechtenstein,1974,.li,
+LK,Sri Lanka,Sri Lanka,1974,.lk,
+LR,Liberia,Liberia,1974,.lr,
+LS,Lesotho,Lesotho,1974,.ls,
+LT,Lithuania,Lithuania,1992,.lt,
+LU,Luxembourg,Luxembourg,1974,.lu,
+LV,Latvia,Latvia,1992,.lv,
+LY,Libya,Libya,1974,.ly,Previous ISO country name: Libyan Arab Jamahiriya
+MA,Morocco,Morocco,1974,.ma,Code taken from name in French: Maroc
+MC,Monaco,Monaco,1974,.mc,
+MD,Moldova,"Moldova, Republic of",1992,.md,Previous ISO country name: Moldova (briefly from 2008 to 2009)
+ME,Montenegro,Montenegro,2006,.me,
+MF,Saint Martin,Saint Martin (French part),2007,.mf,The Dutch part of Saint Martin island is assigned code SX
+MG,Madagascar,Madagascar,1974,.mg,
+MH,Marshall Islands,Marshall Islands,1986,.mh,
+MK,North Macedonia,North Macedonia,1993,.mk,"Code taken from name in Macedonian: Severna Makedonija
+Previous ISO country name: Macedonia, the former Yugoslav Republic of (designated as such due to Macedonia naming dispute)"
+ML,Mali,Mali,1974,.ml,
+MM,Myanmar,Myanmar,1989,.mm,Name changed from Burma (BU)
+MN,Mongolia,Mongolia,1974,.mn,
+MO,Macao,Macao,1974,.mo,Previous ISO country name: Macau; Macao is officially a Special Administrative Region of the People's Republic of China since 20 December 1999
+MP,Northern Mariana Islands,Northern Mariana Islands,1986,.mp,
+MQ,Martinique,Martinique,1974,.mq,
+MR,Mauritania,Mauritania,1974,.mr,
+MS,Montserrat,Montserrat,1974,.ms,
+MT,Malta,Malta,1974,.mt,
+MU,Mauritius,Mauritius,1974,.mu,
+MV,Maldives,Maldives,1974,.mv,
+MW,Malawi,Malawi,1974,.mw,
+MX,Mexico,Mexico,1974,.mx,
+MY,Malaysia,Malaysia,1974,.my,
+MZ,Mozambique,Mozambique,1974,.mz,
+NA,Namibia,Namibia,1974,.na,
+NC,New Caledonia,New Caledonia,1974,.nc,
+NE,Niger,Niger,1974,.ne,
+NF,Norfolk Island,Norfolk Island,1974,.nf,Belongs to Australia
+NG,Nigeria,Nigeria,1974,.ng,
+NI,Nicaragua,Nicaragua,1974,.ni,
+NL,Netherlands,Netherlands,1974,.nl,"Officially includes the islands Bonaire, Saint Eustatius and Saba, which also have code BQ in ISO 3166-1. Within ISO 3166-2, Aruba (AW), Curaçao (CW), and Sint Maarten (SX) are also coded as subdivisions of NL.[19]"
+NO,Norway,Norway,1974,.no,
+NP,Nepal,Nepal,1974,.np,
+NR,Nauru,Nauru,1974,.nr,
+NU,Niue,Niue,1974,.nu,Previous ISO country name: Niue Island
+NZ,New Zealand,New Zealand,1974,.nz,
+OM,Oman,Oman,1974,.om,
+PA,Panama,Panama,1974,.pa,
+PE,Peru,Peru,1974,.pe,
+PF,French Polynesia,French Polynesia,1974,.pf,Code taken from name in French: Polynésie française
+PG,Papua New Guinea,Papua New Guinea,1974,.pg,
+PH,Philippines,Philippines,1974,.ph,
+PK,Pakistan,Pakistan,1974,.pk,
+PL,Poland,Poland,1974,.pl,
+PM,Saint Pierre and Miquelon,Saint Pierre and Miquelon,1974,.pm,
+PN,Pitcairn,Pitcairn,1974,.pn,Previous ISO country name: Pitcairn Islands
+PR,Puerto Rico,Puerto Rico,1974,.pr,
+PS,Palestine,"Palestine, State of",1999,.ps,"Previous ISO country name: Palestinian Territory, Occupied
+Consists of the West Bank and the Gaza Strip"
+PT,Portugal,Portugal,1974,.pt,
+PW,Palau,Palau,1986,.pw,
+PY,Paraguay,Paraguay,1974,.py,
+QA,Qatar,Qatar,1974,.qa,
+RE,Réunion,Réunion,1974,.re,
+RO,Romania,Romania,1974,.ro,
+RS,Serbia,Serbia,2006,.rs,Republic of Serbia
+RU,Russia,Russian Federation,1992,.ru,ISO country name follows UN designation (common name: Russia)
+RW,Rwanda,Rwanda,1974,.rw,
+SA,Saudi Arabia,Saudi Arabia,1974,.sa,
+SB,Solomon Islands,Solomon Islands,1974,.sb,Code taken from former name: British Solomon Islands
+SC,Seychelles,Seychelles,1974,.sc,
+SD,Sudan,Sudan,1974,.sd,
+SE,Sweden,Sweden,1974,.se,
+SG,Singapore,Singapore,1974,.sg,
+SH,"Saint Helena, Ascension and Tristan da Cunha","Saint Helena, Ascension and Tristan da Cunha",1974,.sh,Previous ISO country name: Saint Helena.
+SI,Slovenia,Slovenia,1992,.si,
+SJ,Svalbard and Jan Mayen,Svalbard and Jan Mayen,1974,.sj,"Previous ISO name: Svalbard and Jan Mayen Islands
+Consists of two Arctic territories of Norway: Svalbard and Jan Mayen"
+SK,Slovakia,Slovakia,1993,.sk,SK previously represented the Kingdom of Sikkim
+SL,Sierra Leone,Sierra Leone,1974,.sl,
+SM,San Marino,San Marino,1974,.sm,
+SN,Senegal,Senegal,1974,.sn,
+SO,Somalia,Somalia,1974,.so,
+SR,Suriname,Suriname,1974,.sr,Previous ISO country name: Surinam
+SS,South Sudan,South Sudan,2011,.ss,
+ST,Sao Tome and Principe,Sao Tome and Principe,1974,.st,
+SV,El Salvador,El Salvador,1974,.sv,
+SX,Sint Maarten,Sint Maarten (Dutch part),2010,.sx,The French part of Saint Martin island is assigned code MF
+SY,Syrian Arab Republic,Syrian Arab Republic,1974,.sy,ISO country name follows UN designation (common name and previous ISO country name: Syria)
+SZ,Eswatini,Eswatini,1974,.sz,Previous ISO country name: Swaziland
+TC,Turks and Caicos Islands,Turks and Caicos Islands,1974,.tc,
+TD,Chad,Chad,1974,.td,Code taken from name in French: Tchad
+TF,French Southern Territories,French Southern Territories,1979,.tf,"Covers the French Southern and Antarctic Lands except Adélie Land
+Code taken from name in French: Terres australes françaises"
+TG,Togo,Togo,1974,.tg,
+TH,Thailand,Thailand,1974,.th,
+TJ,Tajikistan,Tajikistan,1992,.tj,
+TK,Tokelau,Tokelau,1974,.tk,Previous ISO country name: Tokelau Islands
+TL,Timor-Leste,Timor-Leste,2002,.tl,Name changed from East Timor (TP)
+TM,Turkmenistan,Turkmenistan,1992,.tm,
+TN,Tunisia,Tunisia,1974,.tn,
+TO,Tonga,Tonga,1974,.to,
+TR,Turkey,Türkiye,1974,.tr,Previous ISO country name: Turkey
+TT,Trinidad and Tobago,Trinidad and Tobago,1974,.tt,
+TV,Tuvalu,Tuvalu,1977,.tv,
+TW,Taiwan,"Taiwan, Province of China",1974,.tw,"Covers the current jurisdiction of the Republic of China
+ISO country name follows UN designation (due to political status of Taiwan within the UN)[18] (common name: Taiwan)"
+TZ,Tanzania,"Tanzania, United Republic of",1974,.tz,
+UA,Ukraine,Ukraine,1974,.ua,"Previous ISO country name: Ukrainian SSR
+Code assigned as the country was already a UN member since 1945[15]"
+UG,Uganda,Uganda,1974,.ug,
+UM,United States Minor Outlying Islands,United States Minor Outlying Islands,1986,,"Consists of nine minor insular areas of the United States: Baker Island, Howland Island, Jarvis Island, Johnston Atoll, Kingman Reef, Midway Islands, Navassa Island, Palmyra Atoll, and Wake Island
+.um ccTLD was revoked in 2007[20]The United States Department of State uses the following user assigned alpha-2 codes for the nine territories, respectively, XB, XH, XQ, XU, XM, QM, XV, XL, and QW.[21]"
+US,United States,United States of America,1974,.us,Previous ISO country name: United States
+UY,Uruguay,Uruguay,1974,.uy,
+UZ,Uzbekistan,Uzbekistan,1992,.uz,
+VA,Holy See,Holy See,1974,.va,"Covers Vatican City, territory of the Holy See
+Previous ISO country names: Vatican City State (Holy See) and Holy See (Vatican City State)"
+VC,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines,1974,.vc,
+VE,Venezuela,Venezuela (Bolivarian Republic of),1974,.ve,Previous ISO country name: Venezuela
+VG,British Virgin Islands,Virgin Islands (British),1974,.vg,
+VI,U.S. Virgin Islands,Virgin Islands (U.S.),1974,.vi,
+VN,Vietnam,Viet Nam,1974,.vn,"ISO country name follows UN designation (common name: Vietnam)
+Code used for Republic of Viet Nam (common name: South Vietnam) before 1977"
+VU,Vanuatu,Vanuatu,1980,.vu,Name changed from New Hebrides (NH)
+WF,Wallis and Futuna,Wallis and Futuna,1974,.wf,Previous ISO country name: Wallis and Futuna Islands
+WS,Samoa,Samoa,1974,.ws,Code taken from former name: Western Samoa
+YE,Yemen,Yemen,1974,.ye,"Previous ISO country name: Yemen, Republic of (for three years after the unification)
+Code used for North Yemen before 1990"
+YT,Mayotte,Mayotte,1993,.yt,
+ZA,South Africa,South Africa,1974,.za,Code taken from name in Dutch: Zuid-Afrika
+ZM,Zambia,Zambia,1974,.zm,
+ZW,Zimbabwe,Zimbabwe,1980,.zw,Name changed from Southern Rhodesia (RH)

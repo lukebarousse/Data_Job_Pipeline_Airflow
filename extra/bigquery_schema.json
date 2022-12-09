@@ -1,0 +1,98 @@
+[
+    {
+      "name": "title",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "company_name",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "location",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "via",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "description",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "extensions",
+      "mode": "REPEATED",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "job_id",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "thumbnail",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "posted_at",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "schedule_type",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "work_from_home",
+      "mode": "NULLABLE",
+      "type": "BOOLEAN",
+      "fields": []
+    },
+    {
+      "name": "salary",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "search_term",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "date_time",
+      "mode": "NULLABLE",
+      "type": "DATETIME",
+      "fields": []
+    },
+    {
+      "name": "search_location",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    },
+    {
+      "name": "commute_time",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "fields": []
+    }
+  ]

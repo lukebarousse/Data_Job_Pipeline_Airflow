@@ -1,0 +1,7 @@
+config.py
+.env
+*.ini
+dags/config/*
+!dags/config/.gitkeep
+logs/*
+__pycache__/
