@@ -13,12 +13,14 @@ I built an [app](https://jobdata.streamlit.app/) to open-source job requirements
 # ☝🏻 Prerequisites
 - [Docker](https://docs.docker.com/get-docker/) installed on your server/machine
 
-# 📲 Install
-## Docker-Compose install via SSH 
-NOTE: Info if using QNAP machine as server
+SERVER NOTE: I used a QNAP machine for my server, here's prereq's for that:
 -  [Familiar with QNAP instructions](https://www.qnap.com/en/how-to/faq/article/how-do-i-access-my-qnap-nas-using-ssh) 
 - Enable SSH via Control Panel
 - Setup *Container/* folder via Container Station 
+
+# 📲 Install
+## Docker-Compose install via SSH 
+
 
 1. Access server via SSH 
 ```
