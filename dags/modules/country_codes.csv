@@ -27,7 +27,7 @@ BI,Burundi,Burundi,1974,.bi,
 BJ,Benin,Benin,1977,.bj,Name changed from Dahomey (DY)
 BL,Saint Barthélemy,Saint Barthélemy,2007,.bl,
 BM,Bermuda,Bermuda,1974,.bm,
-BN,Brunei Darussalam,Brunei Darussalam,1974,.bn,Previous ISO country name: Brunei
+BN,Brunei,Brunei Darussalam,1974,.bn,Previous ISO country name: Brunei
 BO,Bolivia,Bolivia (Plurinational State of),1974,.bo,Previous ISO country name: Bolivia
 BQ,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba",2010,.bq,"Consists of three Caribbean ""special municipalities"", which are part of the Netherlands proper: Bonaire, Sint Eustatius, and Saba (the BES Islands)
 Previous ISO country name: Bonaire, Saint Eustatius and Saba
@@ -116,7 +116,7 @@ IM,Isle of Man,Isle of Man,2006,.im,A British Crown Dependency
 IN,India,India,1974,.in,
 IO,British Indian Ocean Territory,British Indian Ocean Territory,1974,.io,
 IQ,Iraq,Iraq,1974,.iq,
-IR,Iran ,Iran (Islamic Republic of),1974,.ir,Previous ISO country name: Iran
+IR,"Iran ",Iran (Islamic Republic of),1974,.ir,Previous ISO country name: Iran
 IS,Iceland,Iceland,1974,.is,Code taken from name in Icelandic: Ísland
 IT,Italy,Italy,1974,.it,
 JE,Jersey,Jersey,2006,.je,A British Crown Dependency
@@ -136,7 +136,7 @@ KR,South Korea,"Korea, Republic of",1974,.kr,ISO country name follows UN designa
 KW,Kuwait,Kuwait,1974,.kw,
 KY,Cayman Islands,Cayman Islands,1974,.ky,
 KZ,Kazakhstan,Kazakhstan,1992,.kz,Previous ISO country name: Kazakstan
-LA,Lao People's Democratic Republic,Lao People's Democratic Republic,1974,.la,ISO country name follows UN designation (common name and previous ISO country name: Laos)
+LA,Laos,Lao People's Democratic Republic,1974,.la,ISO country name follows UN designation (common name and previous ISO country name: Laos)
 LB,Lebanon,Lebanon,1974,.lb,
 LC,Saint Lucia,Saint Lucia,1974,.lc,
 LI,Liechtenstein,Liechtenstein,1974,.li,
@@ -154,7 +154,7 @@ ME,Montenegro,Montenegro,2006,.me,
 MF,Saint Martin,Saint Martin (French part),2007,.mf,The Dutch part of Saint Martin island is assigned code SX
 MG,Madagascar,Madagascar,1974,.mg,
 MH,Marshall Islands,Marshall Islands,1986,.mh,
-MK,North Macedonia,North Macedonia,1993,.mk,"Code taken from name in Macedonian: Severna Makedonija
+MK,Macedonia (FYROM),North Macedonia,1993,.mk,"Code taken from name in Macedonian: Severna Makedonija
 Previous ISO country name: Macedonia, the former Yugoslav Republic of (designated as such due to Macedonia naming dispute)"
 ML,Mali,Mali,1974,.ml,
 MM,Myanmar,Myanmar,1989,.mm,Name changed from Burma (BU)
@@ -225,7 +225,7 @@ SS,South Sudan,South Sudan,2011,.ss,
 ST,Sao Tome and Principe,Sao Tome and Principe,1974,.st,
 SV,El Salvador,El Salvador,1974,.sv,
 SX,Sint Maarten,Sint Maarten (Dutch part),2010,.sx,The French part of Saint Martin island is assigned code MF
-SY,Syrian Arab Republic,Syrian Arab Republic,1974,.sy,ISO country name follows UN designation (common name and previous ISO country name: Syria)
+SY,Syria,Syrian Arab Republic,1974,.sy,ISO country name follows UN designation (common name and previous ISO country name: Syria)
 SZ,Eswatini,Eswatini,1974,.sz,Previous ISO country name: Swaziland
 TC,Turks and Caicos Islands,Turks and Caicos Islands,1974,.tc,
 TD,Chad,Chad,1974,.td,Code taken from name in French: Tchad

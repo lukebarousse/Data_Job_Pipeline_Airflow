@@ -23,7 +23,7 @@ TESTING_DAG = False
 # Minutes to sleep on an error
 ERROR_SLEEP_MIN = 30 
 # Max number of searches to perform daily
-MAX_SEARCHES = 975
+MAX_SEARCHES = 1500
 # Who is listed as the owner of this DAG in the Airflow Web Server
 DAG_OWNER_NAME = "airflow"
 # List of email address to send email alerts to if this job fails
@@ -100,20 +100,33 @@ with dag:
                     "start": start,
                 }
 
-                search = GoogleSearch(params)
-                results = search.get_dict()
-
+                # try except statement to call SerpAPI and then handle results (inner try/except statement) or handle TimeOut errors
                 try:
-                    if results['error'] == "Google hasn't returned any results for this query.":
-                        print(f"END API CALLS: {search_term} in {search_location} on search {num}")
-                        error = True
+                    search = GoogleSearch(params)
+                    results = search.get_dict()
+
+                    # try except statement needed to handle whether any results are returned
+                    try:
+                        if results['error'] == "Google hasn't returned any results for this query.":
+                            print(f"END SerpApi CALLS: {search_term} in {search_location} on search {num}")
+                            error = True
+                            break
+                    except KeyError:
+                        print(f"SUCCESS SerpApi CALL: {search_term} in {search_location} on search {num}")
+                    else:
+                        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        print(f"SerpApi Error on call!!!: No response on {search_term} in {search_location} on search {num}")
+                        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                         break
-                except KeyError:
-                    print(f"SUCCESS API CALL: {search_term} in {search_location} on search {num}")
-                else:
+                except Exception as e: # catching as 'TimeoutError' didn't work so resorted to catching all...
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(f"ERROR ON API CALL!!!: No response on {search_term} in {search_location} on search {num}")
-                    continue
+                    print(f"SerpApi ERROR (Timeout)!!!: {search_term} in {search_location} had an error (most likely TimeOut)!!!")
+                    print("Following error returned:")
+                    print(e)
+                    print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    time.sleep(ERROR_SLEEP_MIN * 60)
+                    break
 
                 # create dataframe of 10 (or less) pulled results
                 jobs = results['jobs_results']
@@ -156,7 +169,7 @@ with dag:
                 except UnboundLocalError as ule:
                     # TODO: Need to build something to catch this error sooner
                     # GoogleSearch(params) code returns blank results and then get error for  "'jobs_all' referenced before assignment" (i.e., SerpApi issue)
-                    print(f"ERROR!!!: Search {num} of {search_term} in {search_location} yielded no results and FAILED load into BigQuery!!!")
+                    print(f"SerpApi ERROR!!!: Search {num} of {search_term} in {search_location} yielded no results from SerpApi and FAILED load into BigQuery!!!")
                     print("Following error returned:")
                     print(ule)
                     # removing sleep requirement as usually an issue with search term provided
@@ -164,7 +177,7 @@ with dag:
                     num = -1
                 except TimeoutError as te:
                     # client.get_table(table_id) code returns TimeOut Exception with no results... so also adding sleep (i.e., BigQuery issue)
-                    print(f"ERROR!!!: {search_term} in {search_location} had TimeOutError and FAILED to load into BigQuery!!!")
+                    print(f"BigQuery ERROR!!!: {search_term} in {search_location} had TimeOutError and FAILED to load into BigQuery!!!")
                     print("Following error returned:")
                     print(te)
                     print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
@@ -172,7 +185,7 @@ with dag:
                 except Exception as e:
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(f"ERROR!!!: {search_term} in {search_location} had an error that needs to be investigated!!!")
+                    print(f"BigQuery ERROR!!!: {search_term} in {search_location} had an error that needs to be investigated!!!")
                     print("Following error returned:")
                     print(e)
                     print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
@@ -185,7 +198,7 @@ with dag:
         else: # if testing
 
             print(f"END FAKE SEARCH: {search_term} in {search_location}")
-            num_searches = 15 # 15 based on typical amount of searches per page
+            num_searches = 2 # low enough not to max out 1000 searches
 
         return num_searches
 
@@ -217,17 +230,17 @@ with dag:
         search_probabilities = list(country_percent.percent)
 
         # create list of countries listed based on weighted probability to get random countries
-        search_locations = choice(search_countries, size=len(search_countries), replace=False, p=search_probabilities)
+        search_locations = list(choice(search_countries, size=len(search_countries), replace=False, p=search_probabilities))
 
         for search_location in search_locations:
             if total_searches < MAX_SEARCHES:
                 print("####################################")
-                print(f"SEARCHING COUNTRY: {search_location}")
+                print(f"SEARCHING COUNTRY: {search_location} [{search_locations.index(search_location)+1} of {len(search_locations)}]")
                 print("####################################")
                 for search_term in search_terms:
                     print("####################################")
                     print(f"SEARCHING TERM: {search_term}")
-                    print("Starting search number {total_searches}...")
+                    print(f"Starting search number {total_searches}...")
                     num_searches = _serpapi_bigquery(search_term, search_location, search_time)   
                     total_searches += num_searches
             else:

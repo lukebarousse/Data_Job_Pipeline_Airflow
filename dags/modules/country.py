@@ -11,6 +11,10 @@ def view_percent():
     views = views[views.Geography != 'US'] # pulling US already
     views["percent"] = views['Watch time (hours)'] / views['Watch time (hours)'].sum()
 
+    # no results returned from SerpApi from these countries
+    # may consider removing from search in future, but doesn' appear to use search credits for no results
+    no_country_results = ["MO", "IR", "SD", "SY", "SZ", "SS" ] # "Macao", "Iran", "Sudan", "Syria", "Eswatini", "South Sudan"
+
     # merge dataframes for final dataframe
     percent = views.merge(codes, how='left', left_on='Geography', right_on='code')
     percent = percent[['country','percent']]
