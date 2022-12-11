@@ -152,8 +152,6 @@ with dag:
             # if no results returned on first try then will get error if try to insert 0 rows into BigQuery
             if num == 0 and error:
                 print(f"NO DATA LOADED: {num} rows of {search_term} in {search_location} not loaded into BigQuery")
-                # SerpApi provided no results and therefore not counting credits
-                num = -1
             else:
                 try:
                     table_id = config.table_id
