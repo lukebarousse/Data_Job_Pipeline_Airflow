@@ -166,13 +166,11 @@ with dag:
                         print(errors)
                 except UnboundLocalError as ule:
                     # TODO: Need to build something to catch this error sooner
-                    # GoogleSearch(params) code returns blank results and then get error for  "'jobs_all' referenced before assignment" (i.e., SerpApi issue)
+                    # GoogleSearch(params) code returns blank results and then get error for  "'jobs_all' referenced before assignment" in 'errors = client.insert_rows_from_dataframe(table, jobs_all)' (i.e., SerpApi issue)
                     print(f"SerpApi ERROR!!!: Search {num} of {search_term} in {search_location} yielded no results from SerpApi and FAILED load into BigQuery!!!")
                     print("Following error returned:")
                     print(ule)
-                    # removing sleep requirement as usually an issue with search term provided
-                    # SerpApi not responding to searches and therefore not counting credits, resetting num variable to not count credits
-                    num = -1
+                    # no sleep requirement as usually an issue with search term provided
                 except TimeoutError as te:
                     # client.get_table(table_id) code returns TimeOut Exception with no results... so also adding sleep (i.e., BigQuery issue)
                     print(f"BigQuery ERROR!!!: {search_term} in {search_location} had TimeOutError and FAILED to load into BigQuery!!!")
