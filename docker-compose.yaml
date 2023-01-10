@@ -60,6 +60,12 @@ x-airflow-common:
     # Stoped loading core examples as they cluttered up the UI
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+    # For email
+    AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+    AIRFLOW__SMTP__SMTP_PORT: 587
+    AIRFLOW__SMTP__SMTP_USER: ${AIRFLOW__SMTP__SMTP_USER}
+    AIRFLOW__SMTP__SMTP_PASSWORD: ${AIRFLOW__SMTP__SMTP_PASSWORD}
+    AIRFLOW__SMTP__SMTP_MAIL_FROM: ${AIRFLOW__SMTP__SMTP_USER}
     # Failed 'docker-compose up' with additional pip requirments here... also it's bad practice... need to build seperate image... link above on how to
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-} # pandas google-search-results google-cloud-bigquery numpy matplotlib configparser
     GOOGLE_APPLICATION_CREDENTIALS: './dags/config/job-listings-366015-9ac668151dc3.json'

@@ -6,6 +6,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning) # stop getting Pandas FutureWarning's
 
 import time
+import json
 from datetime import datetime, timedelta
 import pandas as pd
 from numpy.random import choice
@@ -19,9 +20,9 @@ from airflow.operators.python_operator import PythonOperator
 from modules.country import view_percent
 
 # 'False' dag is ready for operation; 'True' dag runs with no SerpApi or BigQuery requests
-TESTING_DAG = False
+TESTING_DAG = True
 # Minutes to sleep on an error
-ERROR_SLEEP_MIN = 30 
+ERROR_SLEEP_MIN = 5 
 # Max number of searches to perform daily
 MAX_SEARCHES = 1500
 # Who is listed as the owner of this DAG in the Airflow Web Server
@@ -77,7 +78,116 @@ with dag:
         task_id='start',
         dag=dag)
 
+    def _bigquery_json(results, search_term, search_location, result_offset, error):
+        """
+        Submit JSON return from SerpAPI to BigQuery {gsearch_jobs_all_json} as a backup to hold the original data
+        
+        Args:
+            results : json
+                JSON return from SerpAPI
+            search_term : str
+                Search term
+            search_location : str
+                Search location
+            result_offset : int
+                Parameter to offset the results returned from SerpApi; used for pagination
+            error : bool
+                Flag to indicate if results where returned from SerpApi or not
+        
+        Returns:
+            None
+        """               
+        try:
+            # extract metadata from results
+            try:
+                search_id = results['search_metadata']['id']
+                search_time = results['search_metadata']['created_at']
+                search_time = datetime.strptime(search_time, "%Y-%m-%d %H:%M:%S %Z")
+                search_time_taken = results['search_metadata']['total_time_taken']
+                search_language = results['search_parameters']['hl']
+            except Exception as e:
+                search_id = None
+                search_time = None
+                search_time_taken = None
+                search_language = None
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                print(f"JSON - SerpAPI ERROR!!!: {search_term} in {search_location} JSON file fields have changed!!!")
+                print("Following error returned:")
+                print(e)
+
+            # convert search results and metadata to a dataframe
+            df = pd.DataFrame({'search_term': [search_term],
+                                'search_location': [search_location],
+                                'result_offset': [result_offset],
+                                'error': [error],
+                                'search_id': [search_id],
+                                'search_time': [search_time],
+                                'search_time_taken': [search_time_taken],
+                                'search_language': [search_language],
+                                'results': [json.dumps(results)]
+                                })
+
+            # submit dataframe to BigQuery
+            table_id = config.table_id_json
+            client = bigquery.Client()
+            table = client.get_table(table_id)
+            errors = client.insert_rows_from_dataframe(table, df)
+            if errors == [[]]:
+                print(f"JSON - DATA LOADED: {search_term} in {search_location} loaded into BigQuery {table_id}")
+            else:
+                print(f"JSON - ERROR!!!: {search_term} in {search_location} NOT loaded into BigQuery {table_id}!!!")
+                print("Following error returned from the googles:")
+                print(errors)
+        except UnboundLocalError as ule:
+            # TODO: Need to build something to catch this error sooner
+            # GoogleSearch(params) code returns blank results and then get error for  "'df' referenced before assignment" in 'errors = client.insert_rows_from_dataframe(table, df)' (i.e., SerpApi issue)
+            print(f"JSON - SerpApi ERROR!!!: Search {result_offset} of {search_term} in {search_location} yielded no results from SerpApi and FAILED load into BigQuery!!!")
+            print("Following error returned:")
+            print(ule)
+            # no sleep requirement as usually an issue with search term provided
+        except TimeoutError as te:
+            # client.get_table(table_id) code returns TimeOut Exception with no results... so also adding sleep (i.e., BigQuery issue)
+            print(f"JSON - BigQuery ERROR!!!: {search_term} in {search_location} had TimeOutError and FAILED to load into BigQuery  {table_id}!!!")
+            print("Following error returned:")
+            print(te)
+            # sleep removed for first implementation 12/31/2022
+            # print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
+            # time.sleep(ERROR_SLEEP_MIN * 60)
+        except Exception as e:
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(f"JSON - BigQuery ERROR!!!: {search_term} in {search_location} had an error that needs to be investigated!!!")
+            print("Following error returned:")
+            print(e)
+            # sleep removed for testing
+            # print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
+            # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            # time.sleep(ERROR_SLEEP_MIN * 60)
+
+        return
+
     def _serpapi_bigquery(search_term, search_location, search_time):
+        """
+        Function to call SerpApi and insert results into BigQuery {gsearch_jobs_all} used by us_job_postings 
+        and non_us_job_postings tasks
+
+        Args:
+            search_terms : list
+                List of search terms to search for
+            search_locations : list
+                List of search locations to search for
+            search_time : str
+                Time period to search for (e.g. 'past 24 hours')
+
+        Returns:
+            num_searches : int
+                Number of searches performed for this search term and location
+        
+        Source:
+            https://serpapi.com/google-jobs-results
+            https://cloud.google.com/bigquery/docs/reference/libraries
+        """
         
         if not TESTING_DAG:
 
@@ -110,13 +220,18 @@ with dag:
                         if results['error'] == "Google hasn't returned any results for this query.":
                             print(f"END SerpApi CALLS: {search_term} in {search_location} on search {num}")
                             error = True
+                            # Send JSON request to BigQuery json table
+                            _bigquery_json(results, search_term, search_location, num, error)
                             break
                     except KeyError:
                         print(f"SUCCESS SerpApi CALL: {search_term} in {search_location} on search {num}")
+                        # Send JSON request to BigQuery json table
+                        _bigquery_json(results, search_term, search_location, num, error)
                     else:
                         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                         print(f"SerpApi Error on call!!!: No response on {search_term} in {search_location} on search {num}")
                         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        error = True
                         break
                 except Exception as e: # catching as 'TimeoutError' didn't work so resorted to catching all...
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -126,6 +241,7 @@ with dag:
                     print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     time.sleep(ERROR_SLEEP_MIN * 60)
+                    error = True
                     break
 
                 # create dataframe of 10 (or less) pulled results
@@ -154,6 +270,29 @@ with dag:
                 print(f"NO DATA LOADED: {num} rows of {search_term} in {search_location} not loaded into BigQuery")
             else:
                 try:
+                    # 28Dec2022: Following added after SerpApi changed format of json file
+                    # wanted to keep extra columns ['job_highlights' 'related_links'] added in json but reached bigquery resource limit
+                    # tried to convert these columns to json but ran into error troubleshooting all day
+                    # jobs_all['json'] = jobs_all.apply(lambda x: x.to_json(), axis=1)
+                    final_columns = ['title',
+                    'company_name',
+                    'location',
+                    'via',
+                    'description',
+                    'extensions',
+                    'job_id',
+                    'thumbnail',
+                    'posted_at',
+                    'schedule_type',
+                    'salary',
+                    'work_from_home',
+                    'date_time',
+                    'search_term',
+                    'search_location',
+                    'commute_time']
+                    # select only columns from final_columns if they exist in jobs_all
+                    jobs_all = jobs_all.loc[:, jobs_all.columns.isin(final_columns)]
+
                     table_id = config.table_id
                     client = bigquery.Client()
                     table = client.get_table(table_id)
@@ -167,13 +306,13 @@ with dag:
                 except UnboundLocalError as ule:
                     # TODO: Need to build something to catch this error sooner
                     # GoogleSearch(params) code returns blank results and then get error for  "'jobs_all' referenced before assignment" in 'errors = client.insert_rows_from_dataframe(table, jobs_all)' (i.e., SerpApi issue)
-                    print(f"SerpApi ERROR!!!: Search {num} of {search_term} in {search_location} yielded no results from SerpApi and FAILED load into BigQuery!!!")
+                    print(f"SerpApi ERROR!!!: Search {num} of {search_term} in {search_location} yielded no results from SerpApi and FAILED load into non-JSON BigQuery!!!")
                     print("Following error returned:")
                     print(ule)
                     # no sleep requirement as usually an issue with search term provided
                 except TimeoutError as te:
                     # client.get_table(table_id) code returns TimeOut Exception with no results... so also adding sleep (i.e., BigQuery issue)
-                    print(f"BigQuery ERROR!!!: {search_term} in {search_location} had TimeOutError and FAILED to load into BigQuery!!!")
+                    print(f"BigQuery ERROR!!!: {search_term} in {search_location} had TimeOutError and FAILED to load into non-JSON BigQuery!!!")
                     print("Following error returned:")
                     print(te)
                     print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
@@ -181,7 +320,7 @@ with dag:
                 except Exception as e:
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(f"BigQuery ERROR!!!: {search_term} in {search_location} had an error that needs to be investigated!!!")
+                    print(f"non-JSON BigQuery ERROR!!!: {search_term} in {search_location} had an error that needs to be investigated!!!")
                     print("Following error returned:")
                     print(e)
                     print(f"Sleeping for {ERROR_SLEEP_MIN} minutes")
@@ -199,6 +338,20 @@ with dag:
         return num_searches
 
     def _us_jobs(search_terms, search_locations_us, **context):
+        """
+        DAG to pull US job postings using the _serpapi_bigquery function
+
+        Args:
+            search_terms : list
+                List of search terms to search for
+            search_locations_us : list
+                List of search locations to search for
+            context : dict
+                Context dictionary from Airflow
+
+        Returns:
+            None
+        """
         search_time = "date_posted:today"
         total_searches = 0
 
@@ -208,6 +361,7 @@ with dag:
                 num_searches = _serpapi_bigquery(search_term, search_location, search_time)   
                 total_searches += num_searches
 
+        # push total_searches to xcom so can use in next task
         context['task_instance'].xcom_push(key='total_searches', value=total_searches)
 
         return
@@ -220,6 +374,23 @@ with dag:
     )
 
     def _non_us_jobs(search_terms, country_percent, **context):
+        """
+        DAG to pull non-US job postings using the _serpapi_bigquery function
+
+        Args:
+            search_terms : list
+                List of search terms to search for
+            country_percent : pandas dataframe
+                Dataframe of countries and their relative percent of total YouTube views for my channel
+            context : dict
+                Context dictionary from Airflow
+
+        Returns:
+            None
+        
+        Source:
+            https://youtube.com/@lukebarousse
+        """
         search_time = "date_posted:today"
         total_searches = context['task_instance'].xcom_pull(task_ids='us_jobs', key='total_searches')
         search_countries = list(country_percent.country)
