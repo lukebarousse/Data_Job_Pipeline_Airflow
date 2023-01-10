@@ -20,7 +20,7 @@ from airflow.operators.python_operator import PythonOperator
 from modules.country import view_percent
 
 # 'False' dag is ready for operation; 'True' dag runs with no SerpApi or BigQuery requests
-TESTING_DAG = True
+TESTING_DAG = False
 # Minutes to sleep on an error
 ERROR_SLEEP_MIN = 5 
 # Max number of searches to perform daily
