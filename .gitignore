@@ -6,3 +6,6 @@ dags/config/*
 logs/*
 !logs/.gitkeep
 __pycache__/
+token.json
+client_secret.json
+google_oauth.py

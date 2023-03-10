@@ -65,8 +65,8 @@ Prerequisite: Empty BigQuery database created with [this schema](/extra/bigquery
 - Enable BigQuery API
 - Create a service account
 - Create & get service account key (JSON file)
-2. Place JSON file in */dags/config* directory
-3. Add location of JSON file in *docker-compose.yaml*
+2. Place JSON file in [/dags/config](/dags/config/) directory
+3. Add location of JSON file in [docker-compose.yaml](docker-compose.yaml)
 ```
 environment:
     GOOGLE_APPLICATION_CREDENTIALS: './dags/config/{Insert name of JSON file}.json'
@@ -79,6 +79,7 @@ echo -e "table_id = '{PROJECT_ID}.{DATASET}.{TABLE}'" >> config.py
 # 🐳 Start & Stop
 Reference: [Airflow with Docker-Compose](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html)
 ## Start-up of Docker-Compose
+NOTE: If you don't want to use credits on first run change 'serpapi_biquery.py' to testing
 1. If necessary, SSH and cd into root directory
 ```
 cd ..

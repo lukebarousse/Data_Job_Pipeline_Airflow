@@ -1,6 +1,6 @@
 """
-An operations workflow that you can deploy into Airflow to collect data science
-job postings from around the world.
+An operations workflow to collect data science job postings from SerpApi and
+insert into BigQuery.
 """
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning) # stop getting Pandas FutureWarning's
@@ -19,7 +19,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from modules.country import view_percent
 
-# 'False' dag is ready for operation; 'True' dag runs with no SerpApi or BigQuery requests
+# 'False' DAG is ready for operation; i.e., 'True' DAG runs using no SerpApi credits or BigQuery requests
 TESTING_DAG = False
 # Minutes to sleep on an error
 ERROR_SLEEP_MIN = 5 
@@ -37,7 +37,7 @@ default_args = {
     'depends_on_past': False,
     'start_date': START_DATE, 
     'email': ALERT_EMAIL_ADDRESSES,
-    'email_on_failure': False,
+    'email_on_failure': True,
     'email_on_retry': False,
     'retries': 0, # removing retries to not call insert duplicates into BigQuery
     'retry_delay': timedelta(minutes=5),
