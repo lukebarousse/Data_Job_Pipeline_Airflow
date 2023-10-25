@@ -85,7 +85,7 @@ NOTE: If you don't want to use credits on first run change 'serpapi_biquery.py' 
 cd ..
 cd share/Container/Data_Job_Pipeline_Airflow
 ```
-2. Initialize database for airflow
+2. If first time, initialize database for airflow
 ```
 docker-compose up airflow-init
 ```

@@ -1,3 +1,7 @@
+"""
+Classify countries by code and sort them by percentage of views
+"""
+
 import pandas as pd
 
 def view_percent():

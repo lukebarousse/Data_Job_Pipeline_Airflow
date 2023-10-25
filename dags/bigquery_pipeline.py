@@ -17,6 +17,7 @@ from airflow.operators.http_operator import SimpleHttpOperator
 from datetime import timedelta
 
 from youtube.google_oauth import update_video
+from modules.job_title import transform_job_title
 
 
 # 'False' DAG is ready for operation; 'True' DAG only runs 'start' DummyOperator
@@ -163,6 +164,13 @@ with dag:
             dag=dag
         )
 
+        # Transform job title using BART
+        transform_job = PythonOperator(
+        task_id='transform_job_title',
+        python_callable=transform_job_title,
+        dag=dag
+        )
+
         # Combine fact table with dimension table
         wide_table_build = BigQueryInsertJobOperator(
             task_id='wide_table_build',
@@ -176,6 +184,7 @@ with dag:
             dag=dag
         )
 
+        # Cache common BigQuery queries in CSV files
         cache_csv = BigQueryInsertJobOperator(
             task_id='cache_csv',
             gcp_conn_id='google_cloud_default',
@@ -188,10 +197,25 @@ with dag:
             dag=dag
         )
 
+        # Update video title in YouTube with number of job listings
         update_video_title = PythonOperator(
         task_id='update_video_title',
         python_callable=update_video,
         dag=dag
         )
 
-        start >> fact_table_build >> start_cluster >> salary_table >> skill_table >> stop_cluster >> wide_table_build >> cache_csv >> update_video_title
+        # Create public dataset w/ No duplicates (for ChatGPT course)
+        public_table_build = BigQueryInsertJobOperator(
+            task_id='public_table_build',
+            gcp_conn_id='google_cloud_default',
+            configuration={
+                "query": {
+                    "query": 'sql/public_build.sql',
+                    "useLegacySql": False
+                }
+            },
+            dag=dag
+        )
+
+
+        start >> fact_table_build >> start_cluster >> salary_table >> skill_table >> stop_cluster >> transform_job >> wide_table_build >> cache_csv >> update_video_title >> public_table_build

@@ -8,3 +8,7 @@ google-cloud-storage
 google-api-python-client
 google-auth-oauthlib
 google-auth-httplib2
+torch
+torchvision
+transformers
+pandas-gbq
