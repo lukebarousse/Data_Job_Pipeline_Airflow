@@ -55,9 +55,76 @@ EXPORT DATA
 AS (
     SELECT * FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_keywords
 );
+----------------
+-- 🕒 Skills Trend Page
+-- "Select All"/"Select All" export
+EXPORT DATA
+  OPTIONS (
+    uri = 'gs://gsearch_share/cache/skill-trend/skill-trend-*.csv',
+    format = 'CSV',
+    overwrite = true,
+    header = true,
+    field_delimiter = ',')
+AS (
+    WITH top_skills AS (
+        SELECT keywords.element AS skill
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide,
+            UNNEST(keywords_all.list) AS keywords
+        WHERE 1 = 1
+        GROUP BY skill
+        ORDER BY COUNT(*) DESC
+        LIMIT 5
+    ),
+
+    skill_counts AS (
+        SELECT date, skill, SUM(daily_skill_count) AS daily_skill_count
+        FROM (
+            SELECT DATE(search_time) AS date,
+                keywords.element AS skill,
+                COUNT(*) as daily_skill_count
+            FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide,
+                UNNEST(keywords_all.list) AS keywords
+            WHERE 1 = 1
+            AND keywords.element IN (SELECT skill FROM top_skills)
+            GROUP BY date, skill
+        )
+        GROUP BY date, skill
+    ),
+
+    total_jobs AS (
+                SELECT COUNT(*)
+                FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+                WHERE 1 = 1
+            ),
+
+    total_jobs_grouped AS (
+        SELECT date, SUM(daily_total_count) OVER (
+            ORDER BY date
+            ROWS BETWEEN 13 PRECEDING AND CURRENT ROW
+        ) as rolling_total_count
+        FROM (
+            SELECT DATE(search_time) AS date, COUNT(*) AS daily_total_count
+            FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+            WHERE 1 = 1
+            GROUP BY date
+        )
+    )
+
+    SELECT sc.date,
+        sc.skill,
+        (SUM(sc.daily_skill_count) OVER (
+            PARTITION BY sc.skill
+            ORDER BY sc.date
+            ROWS BETWEEN 13 PRECEDING AND CURRENT ROW
+        ) / tjg.rolling_total_count) as skill_percentage,
+        (SELECT * FROM total_jobs) AS total_jobs
+    FROM skill_counts sc
+    JOIN total_jobs_grouped tjg ON sc.date = tjg.date
+    ORDER BY sc.date DESC, skill_percentage DESC
+);
 
 ----------------
--- 🆚 Skill-Pay Page 
+-- 💰 Skill-Pay Page 
 -- "Select All"/"Select All" export
 EXPORT DATA
   OPTIONS (
@@ -111,7 +178,7 @@ AS (
 );
 
 ----------------
--- 💸 Salary Page
+-- 💸 Job Salaries Page
 -- (No Selections) export
 EXPORT DATA
   OPTIONS (

@@ -151,7 +151,8 @@ CREATE OR REPLACE TABLE `job-listings-366015`.gsearch_job_listings_clean.gsearch
             job_location,
             job_schedule_type,
             job_via,
-            search_country
+            search_country,
+            search_time,
         FROM
             `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
         WHERE salary_avg IS NOT NULL
