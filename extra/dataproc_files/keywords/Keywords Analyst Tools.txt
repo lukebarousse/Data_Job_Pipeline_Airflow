@@ -1,0 +1,26 @@
+excel
+tableau
+word
+powerpoint
+looker
+power bi
+outlook
+sas
+sharepoint
+visio
+spreadsheet
+alteryx
+ssis
+spss
+ssrs
+microstrategy
+cognos
+dax
+esquisse
+sap
+splunk
+qlik
+nuix
+datarobot
+ms access
+sheets

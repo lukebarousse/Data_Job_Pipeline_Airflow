@@ -1,0 +1,13 @@
+unix
+linux
+windows
+macos
+wsl
+ubuntu
+centos
+debian
+redhat
+suse
+fedora
+kali
+arch

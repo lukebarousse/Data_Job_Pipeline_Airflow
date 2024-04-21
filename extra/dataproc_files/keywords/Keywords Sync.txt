@@ -1,0 +1,14 @@
+slack
+microsoft teams
+twilio
+zoom
+webex
+mattermost
+rocketchat
+ringcentral
+symphony
+wire
+wickr
+unify
+coolfire
+google chat

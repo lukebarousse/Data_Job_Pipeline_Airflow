@@ -1,0 +1,20 @@
+aws
+azure
+gcp
+firebase
+heroku
+digitalocean
+vmware
+managedhosting
+linode
+ovh
+oracle
+openstack
+watson
+colocation
+snowflake
+redshift
+bigquery
+aurora
+databricks
+ibm cloud

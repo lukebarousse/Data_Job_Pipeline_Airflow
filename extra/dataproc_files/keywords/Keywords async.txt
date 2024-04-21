@@ -1,0 +1,20 @@
+jira
+confluence
+trello
+notion
+asana
+clickup
+planner
+monday.com
+airtable
+smartsheet
+wrike
+workfront
+dingtalk
+swit
+workzone
+projectplace
+cerri
+wimi
+leankor
+microsoft lists
