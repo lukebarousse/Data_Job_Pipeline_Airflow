@@ -57,7 +57,7 @@ Prerequisite: SerpAPI account created with enough credits
 1. Get your private API key from from [SerpApi Dashboard](https://serpapi.com/dashboard)
 2. Create python file for SerpApi key
 ```
-echo -e "serpapi_key = '{Insert your key here}'" > config.py
+echo -e "serpapi_key = '{Insert your key here}'" > config.py # or /dag/config/config.py if in root
 ```
 ## BigQuery Access
 Prerequisite: Empty BigQuery database created with [this schema](/extra/bigquery_schema.json)
