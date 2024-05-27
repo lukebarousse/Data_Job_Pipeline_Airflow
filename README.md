@@ -71,7 +71,11 @@ Prerequisite: Empty BigQuery database created with [this schema](/extra/bigquery
 environment:
     GOOGLE_APPLICATION_CREDENTIALS: './dags/config/{Insert name of JSON file}.json'
 ```
-4. Add name of table id to config file
+4. Add name of json table id to config file
+```
+echo -e "table_id_json = '{PROJECT_ID}.{DATASET}.{TABLE}'" >> config.py
+```
+I also have this as backup:
 ```
 echo -e "table_id = '{PROJECT_ID}.{DATASET}.{TABLE}'" >> config.py
 ```
