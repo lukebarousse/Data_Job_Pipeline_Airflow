@@ -23,14 +23,14 @@ try:
 except Exception as e:
     BASE_LOG_FOLDER = conf.get("logging", "BASE_LOG_FOLDER").rstrip("/")
 # How often to Run. @daily - Once a day at Midnight
-SCHEDULE_INTERVAL = "@daily"
+SCHEDULE_INTERVAL = "@weekly"
 # Who is listed as the owner of this DAG in the Airflow Web Server
 DAG_OWNER_NAME = "airflow"
 # List of email address to send email alerts to if this job fails
 ALERT_EMAIL_ADDRESSES = ['luke@lukebarousse.com']
 # Length to retain the log files if not already provided in the conf. If this
 # is set to 30, the job will remove those files that are 30 days old or older
-DEFAULT_MAX_LOG_AGE_IN_DAYS = 7
+DEFAULT_MAX_LOG_AGE_IN_DAYS = 30
 # Can set as variable in U/I
 # Variable.get(
 #     "airflow_log_cleanup__max_log_age_in_days", 30
