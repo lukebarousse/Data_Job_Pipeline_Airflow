@@ -9,19 +9,80 @@ EXPORT DATA
     header = true,
     field_delimiter = ',')
 AS (
-    WITH total_jobs AS (
-        SELECT COUNT(*)
+    WITH all_time AS (
+        SELECT COUNT(*) as total
         FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+    ),
+    last_7_days AS (
+        SELECT COUNT(*) as total
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+    ),
+    last_30_days AS (
+        SELECT COUNT(*) as total
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+    ),
+    ytd AS (
+        SELECT COUNT(*) as total
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
     )
 
-    SELECT keywords.element                                AS skill,
-        COUNT(job_id) / (SELECT * FROM total_jobs)       AS skill_percent,
-        COUNT(job_id)                                    AS skill_count,
-        (SELECT * FROM total_jobs)                         AS total_jobs
+    -- All time
+    SELECT 
+        keywords.element AS skill,
+        COUNT(job_id) / (SELECT total FROM all_time) AS skill_percent,
+        COUNT(job_id) AS skill_count,
+        (SELECT total FROM all_time) AS total_jobs,
+        'All time' as timeframe
     FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide,
         UNNEST(keywords_all.list) AS keywords
     GROUP BY skill 
-    ORDER BY skill_count DESC
+
+    UNION ALL
+
+    -- Last 7 days
+    SELECT 
+        keywords.element AS skill,
+        COUNT(job_id) / (SELECT total FROM last_7_days) AS skill_percent,
+        COUNT(job_id) AS skill_count,
+        (SELECT total FROM last_7_days) AS total_jobs,
+        'Last 7 days' as timeframe
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide,
+        UNNEST(keywords_all.list) AS keywords
+    WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+    GROUP BY skill
+
+    UNION ALL
+
+    -- Last 30 days
+    SELECT 
+        keywords.element AS skill,
+        COUNT(job_id) / (SELECT total FROM last_30_days) AS skill_percent,
+        COUNT(job_id) AS skill_count,
+        (SELECT total FROM last_30_days) AS total_jobs,
+        'Last 30 days' as timeframe
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide,
+        UNNEST(keywords_all.list) AS keywords
+    WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+    GROUP BY skill
+
+    UNION ALL
+
+    -- Year to date
+    SELECT 
+        keywords.element AS skill,
+        COUNT(job_id) / (SELECT total FROM ytd) AS skill_percent,
+        COUNT(job_id) AS skill_count,
+        (SELECT total FROM ytd) AS total_jobs,
+        'YTD' as timeframe
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide,
+        UNNEST(keywords_all.list) AS keywords
+    WHERE search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+    GROUP BY skill
+
+    ORDER BY timeframe, skill_count DESC
 );
 
 -- Slicer
@@ -55,6 +116,349 @@ EXPORT DATA
 AS (
     SELECT * FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_keywords
 );
+
+EXPORT DATA
+    OPTIONS (
+        uri = 'gs://gsearch_share/cache/skills/timeframes/alltime-*.csv',
+        format = 'CSV',
+        overwrite = true,
+        header = true,
+        field_delimiter = ',')
+AS (
+    WITH total_jobs_country_title AS (
+        SELECT job_title_final, search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        GROUP BY job_title_final, search_country
+    ),
+    total_jobs_title AS (
+        SELECT job_title_final, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        GROUP BY job_title_final
+    ),
+    total_jobs_country AS (
+        SELECT search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        GROUP BY search_country
+    )
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country_title t 
+        ON t.job_title_final = j.job_title_final 
+        AND t.search_country = j.search_country
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        j.search_country,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        NULL AS search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_title t 
+        ON t.job_title_final = j.job_title_final
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        NULL AS job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country t 
+        ON t.search_country = j.search_country
+    GROUP BY 
+        skill,
+        j.search_country,
+        t.job_count
+
+    ORDER BY skill_count DESC
+);
+
+EXPORT DATA
+    OPTIONS (
+        uri = 'gs://gsearch_share/cache/skills/timeframes/7day-*.csv',
+        format = 'CSV',
+        overwrite = true,
+        header = true,
+        field_delimiter = ',')
+AS (
+    WITH total_jobs_country_title AS (
+        SELECT job_title_final, search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+        GROUP BY job_title_final, search_country
+    ),
+    total_jobs_title AS (
+        SELECT job_title_final, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+        GROUP BY job_title_final
+    ),
+    total_jobs_country AS (
+        SELECT search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+        GROUP BY search_country
+    )
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country_title t 
+        ON t.job_title_final = j.job_title_final 
+        AND t.search_country = j.search_country
+    WHERE j.search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        j.search_country,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        NULL AS search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_title t 
+        ON t.job_title_final = j.job_title_final
+    WHERE j.search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        NULL AS job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country t 
+        ON t.search_country = j.search_country
+    WHERE j.search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+    GROUP BY 
+        skill,
+        j.search_country,
+        t.job_count
+
+    ORDER BY skill_count DESC
+);
+
+EXPORT DATA
+    OPTIONS (
+        uri = 'gs://gsearch_share/cache/skills/timeframes/30day-*.csv',
+        format = 'CSV',
+        overwrite = true,
+        header = true,
+        field_delimiter = ',')
+AS (
+    WITH total_jobs_country_title AS (
+        SELECT job_title_final, search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+        GROUP BY job_title_final, search_country
+    ),
+    total_jobs_title AS (
+        SELECT job_title_final, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+        GROUP BY job_title_final
+    ),
+    total_jobs_country AS (
+        SELECT search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+        GROUP BY search_country
+    )
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country_title t 
+        ON t.job_title_final = j.job_title_final 
+        AND t.search_country = j.search_country
+    WHERE j.search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        j.search_country,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        NULL AS search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_title t 
+        ON t.job_title_final = j.job_title_final
+    WHERE j.search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        NULL AS job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country t 
+        ON t.search_country = j.search_country
+    WHERE j.search_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+    GROUP BY 
+        skill,
+        j.search_country,
+        t.job_count
+
+    ORDER BY skill_count DESC
+);
+
+EXPORT DATA
+    OPTIONS (
+        uri = 'gs://gsearch_share/cache/skills/timeframes/ytd-*.csv',
+        format = 'CSV',
+        overwrite = true,
+        header = true,
+        field_delimiter = ',')
+AS (
+    WITH total_jobs_country_title AS (
+        SELECT job_title_final, search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+        GROUP BY job_title_final, search_country
+    ),
+    total_jobs_title AS (
+        SELECT job_title_final, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+        GROUP BY job_title_final
+    ),
+    total_jobs_country AS (
+        SELECT search_country, COUNT(*) AS job_count
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+        WHERE search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+        GROUP BY search_country
+    )
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country_title t 
+        ON t.job_title_final = j.job_title_final 
+        AND t.search_country = j.search_country
+    WHERE j.search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        j.search_country,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        j.job_title_final,
+        NULL AS search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_title t 
+        ON t.job_title_final = j.job_title_final
+    WHERE j.search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+    GROUP BY 
+        skill,
+        j.job_title_final,
+        t.job_count
+
+    UNION ALL
+
+    SELECT 
+        keywords.element AS skill,
+        NULL AS job_title_final,
+        j.search_country,
+        COUNT(j.job_id) / t.job_count AS skill_percent,
+        COUNT(j.job_id) AS skill_count,
+        t.job_count AS total_jobs
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN total_jobs_country t 
+        ON t.search_country = j.search_country
+    WHERE j.search_time >= DATE_TRUNC(CURRENT_DATE(), YEAR)
+    GROUP BY 
+        skill,
+        j.search_country,
+        t.job_count
+
+    ORDER BY skill_count DESC
+);
+
 ----------------
 -- 🕒 Skills Trend Page
 -- "Select All"/"Select All" export
@@ -175,6 +579,36 @@ AS (
     WHERE search_country IS NOT NULL AND salary_year IS NOT NULL
     GROUP BY job_title, search_country
     ORDER BY job_count DESC
+);
+
+-- Selection export
+EXPORT DATA
+  OPTIONS (
+    uri = 'gs://gsearch_share/cache/skill-pay/skill-pay-all-*.csv',
+    format = 'CSV',
+    overwrite = true,
+    header = true,
+    field_delimiter = ',')
+AS (
+    WITH numbered_jobs AS (
+        SELECT DISTINCT job_id,
+            ROW_NUMBER() OVER (ORDER BY job_id) as job_number
+        FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide
+    )
+
+    SELECT
+        n.job_number,
+        j.job_title_final,
+        j.search_country,
+        j.search_time,
+        keywords.element AS skill,
+        APPROX_QUANTILES(j.salary_year, 2)[OFFSET(1)] AS median
+    FROM `job-listings-366015`.gsearch_job_listings_clean.gsearch_jobs_wide j,
+        UNNEST(keywords_all.list) AS keywords
+    JOIN numbered_jobs n ON j.job_id = n.job_id
+    WHERE j.salary_year IS NOT NULL
+    GROUP BY n.job_number, j.job_title_final, j.search_country, j.search_time, skill, j.job_id
+    ORDER BY j.search_time DESC
 );
 
 ----------------
